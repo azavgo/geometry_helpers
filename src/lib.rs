@@ -27,6 +27,18 @@ impl Vec2 {
     pub fn length(&self) -> f64 {
         Self::dot(&self, &self).sqrt()
     }
+
+    pub fn add(v1: &Self, v2: &Self) -> Self {
+        let x = v1.x() + v2.x(); 
+        let y = v1.y() + v2.y(); 
+        Self::new(x, y)
+    }
+
+    pub fn sub(v1: &Self, v2: &Self) -> Self {
+        let x = v1.x() - v2.x(); 
+        let y = v1.y() - v2.y(); 
+        Self::new(x, y)
+    }
 }
 
 pub struct Triangle<'a>  {
@@ -52,6 +64,34 @@ impl <'a> Triangle<'a> {
         self.p3
     }
 }
+
+pub struct Line<'a> {
+    p1: &'a Point,
+    p2: &'a Point,
+}
+
+impl <'a> Line<'a> {
+    pub fn new(p1: &'a Point, p2: &'a Point) -> Self {
+        Self { p1, p2 }
+    }
+
+    pub fn p1(&self) -> &'a Point {
+        self.p1
+    }
+
+    pub fn p2(&self) -> &'a Point {
+        self.p2
+    }
+
+    pub fn point_line_distance(&self, p: &'a Point) -> f64 {
+        //Finding line equation coefficients k and b: y = kx + b
+        let k = (&self.p2().y() - &self.p1().y())/(&self.p2().x() - &self.p1().x()); 
+        let b = &self.p1().y() - k * &self.p1().x();      
+        //Unimplemented
+        0.0
+    }
+}
+
 
 #[cfg(test)]
 mod tests {

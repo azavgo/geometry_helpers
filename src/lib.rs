@@ -1,4 +1,4 @@
-
+use std::f64::consts::PI; 
 
 pub struct Vec2 {
     x: f64, 
@@ -39,7 +39,23 @@ impl Vec2 {
         let y = v1.y() - v2.y(); 
         Self::new(x, y)
     }
+
+    //alpha is an angle in radians the vector is being turned 
+    pub fn turn(v: &Self, alpha: f64) -> Self {
+        let x0 = v.x(); 
+        let y0 = v.y(); 
+        let r = v.length();
+        let delta = (y0/x0).atan() - alpha; 
+        let x1 = r * delta.cos(); 
+        let y1 = r * delta.sin(); 
+        Self::new(x1, y1)
+    }
 }
+
+    //Returnes radians with input angle in degrees
+    pub fn radians(angle: f64) -> f64 {
+        PI * angle / 180.0
+    }
 
 pub struct Triangle<'a>  {
     p1: &'a Point,
@@ -96,6 +112,11 @@ impl <'a> Line<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test1_radians() {
+        assert_eq!(radians(180.0), PI); 
+    }
 
     #[test]
     fn test1_vec2_y() {

@@ -20,24 +20,8 @@ impl Vec2 {
         self.y
     }
 
-    pub fn dot(v1: &Self, v2: &Self) -> f64 {
-        v1.x() * v2.x() + v1.y() * v2.y()
-    }
-
     pub fn length(&self) -> f64 {
-        Self::dot(&self, &self).sqrt()
-    }
-
-    pub fn add(v1: &Self, v2: &Self) -> Self {
-        let x = v1.x() + v2.x(); 
-        let y = v1.y() + v2.y(); 
-        Self::new(x, y)
-    }
-
-    pub fn sub(v1: &Self, v2: &Self) -> Self {
-        let x = v1.x() - v2.x(); 
-        let y = v1.y() - v2.y(); 
-        Self::new(x, y)
+        dot(&self, &self).sqrt()
     }
 
     //alpha is an angle in radians the vector is being turned 
@@ -51,6 +35,31 @@ impl Vec2 {
         Self::new(x1, y1)
     }
 }
+
+    pub fn add(v1: &Vec2, v2: &Vec2) -> Vec2 {
+        let x = v1.x() + v2.x(); 
+        let y = v1.y() + v2.y(); 
+        Vec2::new(x, y)
+    }
+
+    pub fn sub(v1: &Vec2, v2: &Vec2) -> Vec2 {
+        let x = v1.x() - v2.x(); 
+        let y = v1.y() - v2.y(); 
+        Vec2::new(x, y)
+    }
+
+    pub fn dot(v1: &Vec2, v2: &Vec2) -> f64 {
+        v1.x() * v2.x() + v1.y() * v2.y()
+    }
+
+    //Translates a vector with a beginning p1 and ending p2 to Origin  
+    pub fn to_origin(p1: &Point, p2: &Point) -> Vec2 {
+        let x = p2.x() - p1.x(); 
+        let y = p2.y() - p1.y(); 
+        Vec2::new(x, y)
+    }
+
+
 
     //Returnes radians with input angle in degrees
     pub fn radians(angle: f64) -> f64 {
@@ -100,11 +109,22 @@ impl <'a> Line<'a> {
     }
 
     pub fn point_line_distance(&self, p: &'a Point) -> f64 {
+        //Checking whether given line is parallel to either x or y axes
+        //(1) Is the given line parallel to x axis 
+        //let v = to_origin(&self.p1(), &self.p2()); 
+        //let i = Vec2::new(1.0, 0.0);
+        //let j = Vec2::new(0.0, 1.0);
+        //if dot(&v, &i) = 0 {v - parallel y axis} or dot (&v, &j) = 0 {v - parallel x - axis} else
+        //continue on finding the line equation
         //Finding line equation coefficients k and b: y = kx + b
         let k = (&self.p2().y() - &self.p1().y())/(&self.p2().x() - &self.p1().x()); 
         let b = &self.p1().y() - k * &self.p1().x();      
-        //Unimplemented
-        0.0
+        //Translating the coordinates y' = y - b of the point p
+        let p_1 = Point::new(p.x(), p.y() - b);
+        //Turn vector p_1 to -atan(k) radians
+        let p_2 = Vec2::turn(&p_1, -k.atan());
+        //Distance from the point to the line will be the absolute value of the y coordinate of the point
+        p_2.y().abs()
     }
 }
 
@@ -134,7 +154,7 @@ mod tests {
     fn test3_vec2_dot() {
         let v1 = Vec2::new(1.0, 5.0);
         let v2 = Vec2::new(-2.0, -3.0); 
-        assert_eq!(Vec2::dot(&v1, &v2), -17.0);
+        assert_eq!(dot(&v1, &v2), -17.0);
     }
 
     #[test]

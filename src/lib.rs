@@ -87,8 +87,18 @@ impl <'a> Triangle<'a> {
         self.p3
     }
 
+    //Tests needed
     pub fn area(&self) -> f64 {
-       unimplemented!()
+        let a1 = self.p1(); 
+        let b1 = self.p2();
+        let c1 = self.p2();
+
+        let a = to_origin(a1, b1); 
+        let b = to_origin(a1, c1); 
+        let la = a.length(); 
+        let lb = b.length(); 
+        let dot_ab = dot(&a, &b); 
+        0.5 * la * lb * (1.0 - dot_ab * dot_ab / (la * la * lb * lb)).sqrt()
     }
 }
 

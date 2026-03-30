@@ -59,8 +59,6 @@ impl Vec2 {
         Vec2::new(x, y)
     }
 
-
-
     //Returnes radians with input angle in degrees
     pub fn radians(angle: f64) -> f64 {
         PI * angle / 180.0
@@ -87,6 +85,10 @@ impl <'a> Triangle<'a> {
 
     pub fn p3(&self) -> &'a Point {
         self.p3
+    }
+
+    pub fn area(&self) -> f64 {
+       unimplemented!()
     }
 }
 

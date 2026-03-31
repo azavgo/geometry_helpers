@@ -62,11 +62,32 @@ impl Point {
     //    Vec2::new(x, y)
     //}
 
-    //Returnes radians with input angle in degrees
-    pub fn radians(angle: f64) -> f64 {
-        PI * angle / 180.0
+    pub struct Angle {
+        radians: f64, //In radians
     }
 
+    impl Angle {
+        pub fn new(radians: f64) -> Self {
+            Self { radians }
+        }
+
+        //Returns radians
+        pub fn radians(&self) -> f64 {
+            self.radians
+        }
+
+        //Returns degrees
+        pub fn degrees(&self) -> f64 {
+            let radians = self.radians();
+            180.0 * radians / PI
+        }
+
+        pub fn angle(degrees: f64) -> Self {
+            Self::new(PI * degrees / 180.0)
+        }
+
+
+    }
 pub struct Triangle<'a>  {
     p1: &'a Point,
     p2: &'a Point, 
@@ -162,8 +183,11 @@ mod tests {
     //}
 
     #[test]
-    fn test1_radians() {
-        assert_eq!(radians(180.0), PI); 
+    fn test1_angle() {
+        let degrees = 45.0; 
+        let angle = Angle::angle(degrees); 
+        let radians = angle.radians(); 
+        assert_eq!(radians, PI / 4.0); 
     }
 
     //#[test]

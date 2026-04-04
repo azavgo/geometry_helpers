@@ -88,18 +88,41 @@ impl <'a> Line<'a> {
 }
 
 //Distance between a line and a point
-//Has not yet been tested yet
+//Some tests do not pass
 pub fn distance(line: &Line, point: &Point) -> f64 {
     let l_eq = line.line_eq(); 
     let x    = point.x(); 
     let y    = point.y(); 
 
-    (l_eq.0 * x + l_eq.1 - y) * l_eq.0.atan().cos()
+    (l_eq.0 * x + l_eq.1 - y).abs() * l_eq.0.atan().cos()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    
+    #[test]
+    fn test1_distance_line_point() {
+       let p = Point::new(2.0, 0.0); 
+       
+       let p1 = &Point::new(0.0, 0.0); 
+       let p2 = &Point { x: 1.0, y: 1.0 }; 
+       let line = Line::new(p1, p2); 
+
+       assert_eq!(distance(&line, &p), 2.0_f64.sqrt()); 
+    }
+
+    #[test]
+    fn test2_distance_line_point() {
+       let p = Point::new(0.0, 3.0); 
+       
+       let p1 = &Point::new(-3.0, 0.0); 
+       let p2 = &Point { x: 0.0, y: -2.0 }; 
+       let line = Line::new(p1, p2); 
+
+       assert_eq!(distance(&line, &p), 18.0_f64.sqrt()); 
+    }
+
 
     #[test]
     fn test1_line_eq() {
